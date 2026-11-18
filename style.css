@@ -142,7 +142,10 @@ h1 { font-size: clamp(36px, 5.4vw, 58px); font-weight: 900; letter-spacing: 0.02
 .project-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
 .card { background: var(--white); border: 1px solid var(--line); display: flex; flex-direction: column; }
 .card > img, .card > video { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; background: var(--tint); }
-.card-body { padding: 24px 26px 26px; }
+.card-body { padding: 24px 26px 26px; flex: 1; display: flex; flex-direction: column; }
+/* role boxes: same height in every card and pinned to the card bottom so a row lines up */
+.card-body .role { margin-top: auto; min-height: 76px; display: flex; align-items: center; }
+.card-body p:not(.role):not(.tags):not(.result) { margin-bottom: 16px; }
 .card-body p { margin: 0; font-size: 15px; }
 .card-body .result { margin: 6px 0 12px; }
 .card-visual { aspect-ratio: 16 / 10; background: var(--navy); display: grid; grid-template-columns: 1fr 1fr; gap: 1px; }

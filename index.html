@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=3">
+  <link rel="stylesheet" href="style.css?v=4">
   <script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
@@ -109,27 +109,27 @@
   <section class="section section-tint">
     <div class="wrap">
       <div class="section-head">
-        <h2>專題想做的方向</h2>
-        <span class="range">方向仍在探索</span>
+        <h2>專題曾做過的方向</h2>
+        <span class="range">整理自做過的作品</span>
       </div>
       <div class="interest-grid">
         <article class="interest">
           <span class="num">01</span>
           <h3>後端與系統開發</h3>
-          <p>寫過智慧藥盒的 LINE Bot 後端，也參與路口邊緣運算服務的開發。比起只讓程式跑起來，我更想學會怎麼讓一個服務穩定、好維護：API 設計、資料庫、測試與部署。</p>
+          <p>以 Python Flask 寫了智慧藥盒的 LINE Bot 後端，負責用藥排程、提醒推播與溫溼度警示；在 5G 專題中參與以 FastAPI 建置的路口邊緣運算服務，處理車輛上報資料與警示回傳。</p>
         </article>
         <article class="interest">
           <span class="num">02</span>
-          <h3>資料分析與 AI 應用</h3>
-          <p>機器人的影像辨識、感測器數值判讀，到 5G 專題的車輛軌跡預測，做的都是「把資料變成判斷」。希望進一步學習機器學習與電腦視覺，讓系統的判斷更準確、也更有根據。</p>
+          <h3>資料分析與影像辨識</h3>
+          <p>競賽機器人以攝影機辨識字母、判斷夾取目標；魚菜園與魚塭監測系統分析水質感測資料並判斷異常；5G 專題則依車輛位置與航向預測機車 1–2 秒內的軌跡。</p>
         </article>
         <article class="interest">
           <span class="num">03</span>
           <h3>網路與即時系統</h3>
-          <p>5G 專題讓我體會到運算放在哪裡很重要：同樣的演算法放在路口邊緣有效，放到遠端雲端就來不及。對網路架構、分散式與即時系統的設計很有興趣。</p>
+          <p>5G 專題比較了把運算放在路口邊緣與遠端雲端的差異：往返延遲約 5 毫秒時警示有效，多 500 毫秒就來不及。智慧藥盒、魚菜園也都透過 Wi-Fi 把裝置狀態即時傳到雲端。</p>
         </article>
       </div>
-      <p class="note">以上是從自己做過的作品整理出的興趣，大方向偏向軟體，還沒有定題，希望在專題中跟著老師找到適合的題目並做得更深入。</p>
+      <p class="note">以上整理自做過的作品，大方向偏向軟體；希望在專題中跟著老師挑一個方向做得更深入。</p>
     </div>
   </section>
 
@@ -186,7 +186,7 @@
             <h3>多功能智慧藥盒</h3>
             <p class="result">IEYI 2025 世界青少年發明展 銀牌（日本）・新型專利 M681785</p>
             <p>12 格旋轉藥盒，ESP32 控制伺服馬達分格出藥，可用 LINE 指令或 RFID 磁扣開啟，OLED 顯示剩餘格數與溫溼度。後端以 Python Flask 架設 LINE Bot，負責用藥提醒，藥盒內溫度超過 26°C 或濕度超過 60% 時主動推播。</p>
-            <p class="role"><strong>我的角色</strong>簡報以外的全部開發：ESP32 韌體、雲端後端與硬體整合。</p>
+            <p class="role"><span><strong>我的角色</strong>簡報以外的全部開發：ESP32 韌體、雲端後端與硬體整合。</span></p>
           </div>
         </article>
 
@@ -198,7 +198,7 @@
             <h3>競賽機器人</h3>
             <p class="result">第 54 屆全國技能競賽 機器人職類・全國第一</p>
             <p>以 NI myRIO 為控制核心、LabVIEW 撰寫程式，整合兩組超音波感測器、BNO055 陀螺儀與攝影機，以影像辨識字母判斷要夾取的物件與位置。設計正三角形底盤、升降與夾爪機構，部分零件自行 3D 列印。</p>
-            <p class="role"><strong>參賽歷程</strong>2023 分區佳作 → 2024 分區第二 → 2024 全國第一。</p>
+            <p class="role"><span><strong>參賽歷程</strong>2023 分區佳作 → 2024 分區第二 → 全國第一</span></p>
           </div>
         </article>
 
@@ -210,7 +210,7 @@
             <h3>救是需藥你：多功能醫療輔助機器人</h3>
             <p class="result">114 年全國專題實作及創意競賽・電機與電子群</p>
             <p>針對護理人力短缺，設計能巡房、送藥收藥、推送輪椅的機器人。myRIO 處理感測器資料與即時控制，實現自主導航與避障；透過 Wi-Fi 讓護理站與家屬端介面遠端下達任務，並統計各房訂餐紀錄。</p>
-            <p class="role"><strong>團隊</strong>五人團隊作品。</p>
+            <p class="role"><span><strong>團隊</strong>五人團隊作品。</span></p>
           </div>
         </article>
 
@@ -222,7 +222,7 @@
             <h3>智慧魚菜園：即時生態監控系統</h3>
             <p class="result">第 64 屆全國科展北一區 工程科學（一）・優等</p>
             <p>以 LinkIt 7697 與 Arduino 量測魚塭的 pH、水溫、濁度與 TDS，經 Wi-Fi 上傳雲端，數值異常時以 LINE 通知漁民。3D 列印環狀魚菜共生模型並加入自動灑水。</p>
-            <p class="role"><strong>解決的問題</strong>pH 感測器標示電壓與實際需求不符，改以電阻分壓解決。</p>
+            <p class="role"><span><strong>解決的問題</strong>pH 感測器標示電壓與實際需求不符，改以電阻分壓解決。</span></p>
           </div>
         </article>
       </div>
