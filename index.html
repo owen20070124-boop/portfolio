@@ -8,7 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=2">
+  <link rel="stylesheet" href="style.css?v=3">
+  <script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
 
@@ -114,16 +115,21 @@
       <div class="interest-grid">
         <article class="interest">
           <span class="num">01</span>
-          <h3>軟硬體整合的機器人與嵌入式系統</h3>
-          <p>從感測器讀值、控制程式到機構，我習慣把軟體和硬體一起考慮。比賽中最常遇到的問題，往往是程式邏輯沒錯，但感測器反應速度、馬達特性或機構誤差讓結果不如預期，需要一邊量測一邊調整。</p>
+          <h3>後端與系統開發</h3>
+          <p>寫過智慧藥盒的 LINE Bot 後端，也參與路口邊緣運算服務的開發。比起只讓程式跑起來，我更想學會怎麼讓一個服務穩定、好維護：API 設計、資料庫、測試與部署。</p>
         </article>
         <article class="interest">
           <span class="num">02</span>
-          <h3>物聯網感測與邊緣運算</h3>
-          <p>魚塭水質、藥盒溫溼度、路口車輛狀態，這幾個作品都是「感測資料要即時變成提醒」。5G 專題讓我體會到運算放在哪裡很重要：同樣的演算法放在路口邊緣有效，放到遠端雲端就來不及。</p>
+          <h3>資料分析與 AI 應用</h3>
+          <p>機器人的影像辨識、感測器數值判讀，到 5G 專題的車輛軌跡預測，做的都是「把資料變成判斷」。希望進一步學習機器學習與電腦視覺，讓系統的判斷更準確、也更有根據。</p>
+        </article>
+        <article class="interest">
+          <span class="num">03</span>
+          <h3>網路與即時系統</h3>
+          <p>5G 專題讓我體會到運算放在哪裡很重要：同樣的演算法放在路口邊緣有效，放到遠端雲端就來不及。對網路架構、分散式與即時系統的設計很有興趣。</p>
         </article>
       </div>
-      <p class="note">以上是從自己做過的作品整理出的興趣，還沒有定題，希望在專題中跟著老師把其中一個方向做得更深入。</p>
+      <p class="note">以上是從自己做過的作品整理出的興趣，大方向偏向軟體，還沒有定題，希望在專題中跟著老師找到適合的題目並做得更深入。</p>
     </div>
   </section>
 
@@ -174,7 +180,7 @@
       <div class="project-grid">
         <!-- 藥盒 -->
         <article class="project card">
-          <img src="assets/pillbox.jpg" alt="灰色圓柱形的智慧藥盒，前方出藥口放著藥丸" loading="lazy" width="1344" height="1080">
+          <video class="clip" src="assets/pillbox.webm" poster="assets/pillbox-clip.jpg" autoplay muted loop playsinline aria-label="以 RFID 磁扣感應後，智慧藥盒出藥口送出藥物的影片"></video>
           <div class="card-body">
             <p class="tags"><span>ESP32</span><span>LINE Bot</span><span>2025</span></p>
             <h3>多功能智慧藥盒</h3>
@@ -186,7 +192,7 @@
 
         <!-- 機器人 -->
         <article class="project card">
-          <img src="assets/robot.jpg" alt="鋁擠型結構的競賽機器人，配有升降機構、夾爪與全向輪" loading="lazy" width="1304" height="1400">
+          <video class="clip" src="assets/robot.webm" poster="assets/robot-clip.jpg" autoplay muted loop playsinline aria-label="競賽機器人在迷宮場地中自主移動的影片"></video>
           <div class="card-body">
             <p class="tags"><span>myRIO</span><span>LabVIEW</span><span>2024</span></p>
             <h3>競賽機器人</h3>
@@ -209,10 +215,8 @@
         </article>
 
         <!-- 魚菜園 -->
-        <article class="project card card-text">
-          <div class="card-visual" aria-hidden="true">
-            <span>pH</span><span>水溫</span><span>濁度</span><span>TDS</span>
-          </div>
+        <article class="project card">
+          <img src="assets/fish.jpg" alt="壓克力魚缸上方架設感測器與控制電路的魚菜共生模型" loading="lazy" width="560" height="350">
           <div class="card-body">
             <p class="tags"><span>LinkIt 7697</span><span>IoT</span><span>2024</span></p>
             <h3>智慧魚菜園：即時生態監控系統</h3>
@@ -380,6 +384,49 @@
 <footer class="site-footer">
   <div class="wrap">© 2026 歐陽聖</div>
 </footer>
+
+<script>
+  // Clips autoplay muted and loop; pause them while off screen to save battery.
+  (function () {
+    var clips = document.querySelectorAll("video.clip");
+    if (!("IntersectionObserver" in window)) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) e.target.play().catch(function () {});
+        else e.target.pause();
+      });
+    }, { threshold: 0.25 });
+    clips.forEach(function (v) { io.observe(v); });
+  })();
+
+  // Scroll reveal: show each block once it enters the viewport, siblings slightly staggered.
+  (function () {
+    var items = Array.prototype.slice.call(document.querySelectorAll(
+      ".featured, .project-grid .card, .more li, .interest, .news, .gallery figure, .timeline li, .award-group, .skill"));
+    items.forEach(function (el) {
+      var i = Array.prototype.indexOf.call(el.parentNode.children, el);
+      el.style.transitionDelay = Math.min(i, 5) * 90 + "ms";
+    });
+    var pending = items.slice();
+    function check() {
+      var limit = window.innerHeight * 0.92;
+      pending = pending.filter(function (el) {
+        if (el.getBoundingClientRect().top < limit) { el.classList.add("is-visible"); return false; }
+        return true;
+      });
+      if (!pending.length) {
+        window.removeEventListener("scroll", onScroll);
+        window.removeEventListener("resize", onScroll);
+        clearInterval(timer);
+      }
+    }
+    var timer = setInterval(check, 500);  // backup in case scroll events arrive late
+    function onScroll() { check(); }  // ~30 elements: cheap enough to check directly on every scroll
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    check();
+  })();
+</script>
 
 </body>
 </html>

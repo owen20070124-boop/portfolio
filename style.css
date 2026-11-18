@@ -105,7 +105,7 @@ h1 { font-size: clamp(36px, 5.4vw, 58px); font-weight: 900; letter-spacing: 0.02
 .t-big { font-size: 26px !important; font-weight: 900; color: var(--navy); margin-bottom: 6px !important; }
 
 /* ---------- interests ---------- */
-.interest-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+.interest-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
 .interest { background: var(--white); padding: 30px 30px 26px; border: 1px solid var(--line); }
 .num { font-family: var(--mono); font-weight: 700; color: var(--gold); font-size: 14px; }
 .interest h3 { font-size: 19px; margin: 6px 0 12px; }
@@ -141,7 +141,7 @@ h1 { font-size: clamp(36px, 5.4vw, 58px); font-weight: 900; letter-spacing: 0.02
 
 .project-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
 .card { background: var(--white); border: 1px solid var(--line); display: flex; flex-direction: column; }
-.card > img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; background: var(--tint); }
+.card > img, .card > video { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; background: var(--tint); }
 .card-body { padding: 24px 26px 26px; }
 .card-body p { margin: 0; font-size: 15px; }
 .card-body .result { margin: 6px 0 12px; }
@@ -220,6 +220,7 @@ h1 { font-size: clamp(36px, 5.4vw, 58px); font-weight: 900; letter-spacing: 0.02
   .featured { grid-template-columns: 1fr; padding: 26px; gap: 28px; }
   .skill-grid { grid-template-columns: 1fr 1fr; }
   .news-grid { grid-template-columns: 1fr; }
+  .interest-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 640px) {
   .wrap { padding: 0 16px; }
@@ -243,3 +244,59 @@ h1 { font-size: clamp(36px, 5.4vw, 58px); font-weight: 900; letter-spacing: 0.02
   .stat { padding: 18px 12px; }
   .stat strong { font-size: 20px; }
 }
+
+/* =====================================================================
+   Theme：玻璃漸層（紫粉漸層背景、半透明毛玻璃卡片）
+   ===================================================================== */
+:root { --navy: #6d28d9; --navy-deep: #2e1065; --gold: #db2777; --gold-soft: #fbcfe8; --tint: transparent; --paper: rgba(255, 255, 255, 0.55); --line: rgba(255, 255, 255, 0.7); --ink: #1e1b2e; --body: #3b3650; --muted: #6b6485; }
+body { background: linear-gradient(135deg, #c7d2fe 0%, #e9d5ff 35%, #fbcfe8 70%, #fde68a 100%) fixed; }
+.site-header { background: rgba(255, 255, 255, 0.45); border-bottom-color: rgba(255, 255, 255, 0.6); }
+.hero { background: transparent; border-bottom: 0; }
+h1 { background: linear-gradient(90deg, #6d28d9, #db2777); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.btn { border-radius: 14px; }
+.btn-primary { background: linear-gradient(90deg, #7c3aed, #db2777); border-color: transparent; box-shadow: 0 8px 24px rgba(124, 58, 237, 0.35); }
+.btn-primary:hover { background: linear-gradient(90deg, #6d28d9, #be185d); }
+.btn-ghost { background: rgba(255, 255, 255, 0.55); border-color: rgba(255, 255, 255, 0.9); color: #6d28d9; }
+.btn-ghost:hover { background: rgba(255, 255, 255, 0.8); }
+.info, .interest, .card, .featured, .news, .stats, .chart, .role, .lead-list, .award-group, .skill {
+  background: rgba(255, 255, 255, 0.5); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.75); border-radius: 20px; box-shadow: 0 10px 30px rgba(76, 29, 149, 0.08); }
+.info { overflow: hidden; }
+.info-row, .info-split, .info-split .info-row + .info-row { border-color: rgba(255, 255, 255, 0.8); }
+.portrait { border-radius: 24px; border-color: rgba(255, 255, 255, 0.8); }
+.stats { margin: 0 24px; border-radius: 22px; color: var(--ink); }
+.stats-grid { padding: 0 24px; }
+.stat { border-left-color: rgba(109, 40, 217, 0.15); }
+.stat strong { color: #6d28d9; }
+.stat span { color: #6b6485; }
+.section, .section-tint { background: transparent; }
+.section-head { border-top-color: rgba(46, 16, 101, 0.25); }
+.card { overflow: hidden; }
+.award-group, .skill { padding: 18px 20px; }
+.lead-list { padding: 18px 22px; }
+.tags span { background: rgba(255, 255, 255, 0.7); color: #6d28d9; }
+.timeline::before { background: rgba(46, 16, 101, 0.3); }
+.timeline li::before { border-radius: 50%; transform: none; background: #fff; border-color: #7c3aed; }
+.timeline li.now::before { background: #db2777; border-color: #db2777; }
+.section-dark { background: rgba(46, 16, 101, 0.85); }
+.gallery figure { border-radius: 16px; }
+.email { border-bottom-color: #db2777; }
+.site-footer { border-top-color: rgba(255, 255, 255, 0.6); }
+@media (max-width: 640px) {
+  .stats { margin: 0 12px; }
+  .stats-grid { padding: 0 16px; }
+  .timeline { border-left-color: rgba(46, 16, 101, 0.3); }
+}
+
+/* =====================================================================
+   捲動進場動畫：作品照片從左右淡入，其餘區塊由下往上
+   （只有在 JavaScript 可用時才先隱藏，避免內容消失）
+   ===================================================================== */
+main { overflow-x: hidden; overflow-x: clip; }
+.js .featured, .js .project-grid .card, .js .more li, .js .interest, .js .news,
+.js .gallery figure, .js .timeline li, .js .award-group, .js .skill {
+  opacity: 0; transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1); will-change: opacity, transform; }
+.js .project-grid .card:nth-child(odd), .js .gallery .g-main, .js .awards-grid .award-group:first-child { transform: translateX(-70px); }
+.js .project-grid .card:nth-child(even), .js .gallery figure:not(.g-main), .js .awards-grid .award-group:last-child { transform: translateX(70px); }
+.js .featured, .js .more li, .js .interest, .js .news, .js .timeline li, .js .skill { transform: translateY(36px); }
+.js .is-visible { opacity: 1 !important; transform: none !important; }
