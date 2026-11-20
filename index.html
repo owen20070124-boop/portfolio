@@ -8,10 +8,45 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=8">
-  <script>document.documentElement.classList.add("js");</script>
+  <link rel="stylesheet" href="style.css?v=9">
+  <script>
+    document.documentElement.classList.add("js");
+    // opening animation: once per browser tab session, so reloading doesn't make visitors wait again
+    try {
+      if (!sessionStorage.getItem("introSeen")) {
+        document.documentElement.classList.add("intro-on");
+        sessionStorage.setItem("introSeen", "1");
+      }
+    } catch (e) {}
+  </script>
 </head>
 <body>
+
+<div class="intro" aria-hidden="true">
+  <div class="intro-inner">
+    <p class="intro-name"><span>歐</span><span>陽</span><span>聖</span></p>
+    <span class="intro-line"></span>
+    <p class="intro-sub">臺科大資工・作品集</p>
+  </div>
+</div>
+<script>
+  // Hold the opening screen briefly, then slide it away and bring in the page header; click or any key skips it.
+  (function () {
+    var root = document.documentElement, intro = document.querySelector(".intro");
+    if (!root.classList.contains("intro-on")) { intro.parentNode.removeChild(intro); return; }
+    var ended = false;
+    function end() {
+      if (ended) return;
+      ended = true;
+      intro.classList.add("is-leaving");
+      root.classList.add("intro-reveal");
+      setTimeout(function () { root.classList.remove("intro-on"); intro.parentNode.removeChild(intro); }, 850);
+    }
+    setTimeout(end, 1650);
+    intro.addEventListener("click", end);
+    window.addEventListener("keydown", end, { once: true });
+  })();
+</script>
 
 <header class="site-header">
   <div class="wrap header-inner">
@@ -447,7 +482,11 @@
     document.querySelectorAll("[data-count]").forEach(function (el) {
       el.textContent = (0).toFixed((el.getAttribute("data-count").split(".")[1] || "").length) + (el.getAttribute("data-suffix") || "");
       // start as soon as any part is on screen, so a visitor never sees the placeholder 0
-      if (!el.closest(".chart")) watch(el, function () { countUp(el); }, 1);
+      if (!el.closest(".chart")) watch(el, function () {
+        // under the opening screen: wait until it has slid away
+        if (document.documentElement.classList.contains("intro-on") && !el.getAttribute("data-delay")) el.setAttribute("data-delay", "1900");
+        countUp(el);
+      }, 1);
     });
     document.querySelectorAll(".chart").forEach(function (chart) {
       watch(chart, function () {
