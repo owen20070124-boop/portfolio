@@ -410,22 +410,26 @@
     var raw = el.getAttribute("data-count"), target = parseFloat(raw);
     var dec = (raw.split(".")[1] || "").length, suffix = el.getAttribute("data-suffix") || "";
     var delay = +el.getAttribute("data-delay") || 0, dur = 1100;
+    var done = false, final = target.toFixed(dec) + suffix;
     setTimeout(function () {
       var t0 = null;
       function step(t) {
+        if (done) return;
         if (t0 === null) t0 = t;
         var p = Math.min((t - t0) / dur, 1), eased = 1 - Math.pow(1 - p, 3);
         el.textContent = (target * eased).toFixed(dec) + suffix;
-        if (p < 1) requestAnimationFrame(step);
+        if (p < 1) requestAnimationFrame(step); else done = true;
       }
       requestAnimationFrame(step);
     }, delay);
+    // background tabs may not run animation frames: never leave a number short of its real value
+    setTimeout(function () { done = true; el.textContent = final; }, delay + dur + 150);
   }
 
   // Everything that starts when it scrolls into view, plus the scroll-driven header UI.
   (function () {
-    var watched = [];  // [element, callback], each fired once
-    function watch(el, fn) { watched.push([el, fn]); }
+    var watched = [];  // [element, callback, trigger line as a fraction of viewport height], each fired once
+    function watch(el, fn, at) { watched.push([el, fn, at || 0.92]); }
     function reveal(el) { return function () { el.classList.add("is-visible"); }; }
 
     // blocks fade in, siblings slightly staggered; on wide screens the timeline steps follow the line as it draws
@@ -442,7 +446,8 @@
     // numbers count up; the chart's values start together with their bars
     document.querySelectorAll("[data-count]").forEach(function (el) {
       el.textContent = (0).toFixed((el.getAttribute("data-count").split(".")[1] || "").length) + (el.getAttribute("data-suffix") || "");
-      if (!el.closest(".chart")) watch(el, function () { countUp(el); });
+      // start as soon as any part is on screen, so a visitor never sees the placeholder 0
+      if (!el.closest(".chart")) watch(el, function () { countUp(el); }, 1);
     });
     document.querySelectorAll(".chart").forEach(function (chart) {
       watch(chart, function () {
@@ -452,9 +457,9 @@
     });
 
     function check() {
-      var limit = window.innerHeight * 0.92;
+      var h = window.innerHeight;
       watched = watched.filter(function (w) {
-        if (w[0].getBoundingClientRect().top < limit) { w[1](); return false; }
+        if (w[0].getBoundingClientRect().top < h * w[2]) { w[1](); return false; }
         return true;
       });
     }
