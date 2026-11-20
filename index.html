@@ -8,41 +8,70 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=9">
+  <link rel="stylesheet" href="style.css?v=10">
   <script>
-    document.documentElement.classList.add("js");
-    // opening animation: once per browser tab session, so reloading doesn't make visitors wait again
-    try {
-      if (!sessionStorage.getItem("introSeen")) {
-        document.documentElement.classList.add("intro-on");
-        sessionStorage.setItem("introSeen", "1");
-      }
-    } catch (e) {}
+    // "js" lets content start hidden for scroll animations; "intro-on" shows the opening screen on every load
+    document.documentElement.classList.add("js", "intro-on");
   </script>
 </head>
 <body>
 
 <div class="intro" aria-hidden="true">
+  <div class="intro-grid"><div></div></div>
+  <div class="intro-scan"></div>
   <div class="intro-inner">
-    <p class="intro-name"><span>歐</span><span>陽</span><span>聖</span></p>
-    <span class="intro-line"></span>
-    <p class="intro-sub">臺科大資工・作品集</p>
+    <p class="intro-tag">&gt; NTUST CSIE // PORTFOLIO</p>
+    <div class="intro-frame">
+      <i class="c c1"></i><i class="c c2"></i><i class="c c3"></i><i class="c c4"></i>
+      <p class="intro-name" data-text="歐陽聖">歐陽聖</p>
+    </div>
+    <div class="intro-bar"><span></span></div>
+    <p class="intro-status"><span class="intro-state">LOADING</span><span class="intro-pct">000%</span></p>
   </div>
+  <ul class="intro-log">
+    <li><b>[ OK ]</b> robotics.module</li>
+    <li><b>[ OK ]</b> 5g-v2x.edge</li>
+    <li><b>[ OK ]</b> iot.sensors</li>
+  </ul>
+  <p class="intro-ver">BUILD 2026.11</p>
 </div>
 <script>
-  // Hold the opening screen briefly, then slide it away and bring in the page header; click or any key skips it.
+  // Opening screen: the name decodes from random symbols while a loader fills to 100%,
+  // then "ACCESS GRANTED", a short glitch, and the screen switches off like an old monitor.
+  // Click or any key skips straight to the page.
   (function () {
     var root = document.documentElement, intro = document.querySelector(".intro");
-    if (!root.classList.contains("intro-on")) { intro.parentNode.removeChild(intro); return; }
-    var ended = false;
+    var nameEl = intro.querySelector(".intro-name"), target = nameEl.getAttribute("data-text").split("");
+    var bar = intro.querySelector(".intro-bar span"), pct = intro.querySelector(".intro-pct"), state = intro.querySelector(".intro-state");
+    var pool = "01<>/#%&*+=?ABCDEFX歐陽聖";  // only glyphs the page already loads, so no extra font downloads
+    var lockAt = [500, 800, 1100], fillMs = 1400, t0 = Date.now(), ended = false, timer;
+
+    nameEl.innerHTML = target.map(function () { return "<span></span>"; }).join("");
+    var spans = nameEl.querySelectorAll("span");
+    function tick() {
+      var t = Date.now() - t0;
+      for (var i = 0; i < spans.length; i++) spans[i].textContent = t >= lockAt[i] ? target[i] : pool.charAt(Math.floor(Math.random() * pool.length));
+      var p = Math.min(t / fillMs, 1), e = 1 - Math.pow(1 - p, 2);
+      bar.style.transform = "scaleX(" + e.toFixed(3) + ")";
+      pct.textContent = ("00" + Math.round(e * 100)).slice(-3) + "%";
+      if (p >= 1) { clearInterval(timer); grant(); }
+    }
+    function grant() {
+      intro.classList.add("is-granted");
+      state.textContent = "ACCESS GRANTED";
+      setTimeout(end, 420);
+    }
     function end() {
       if (ended) return;
       ended = true;
+      clearInterval(timer);
+      for (var i = 0; i < spans.length; i++) spans[i].textContent = target[i];
       intro.classList.add("is-leaving");
       root.classList.add("intro-reveal");
-      setTimeout(function () { root.classList.remove("intro-on"); intro.parentNode.removeChild(intro); }, 850);
+      setTimeout(function () { root.classList.remove("intro-on"); if (intro.parentNode) intro.parentNode.removeChild(intro); }, 600);
     }
-    setTimeout(end, 1650);
+    tick();
+    timer = setInterval(tick, 40);
     intro.addEventListener("click", end);
     window.addEventListener("keydown", end, { once: true });
   })();
@@ -484,7 +513,7 @@
       // start as soon as any part is on screen, so a visitor never sees the placeholder 0
       if (!el.closest(".chart")) watch(el, function () {
         // under the opening screen: wait until it has slid away
-        if (document.documentElement.classList.contains("intro-on") && !el.getAttribute("data-delay")) el.setAttribute("data-delay", "1900");
+        if (document.documentElement.classList.contains("intro-on") && !el.getAttribute("data-delay")) el.setAttribute("data-delay", "2100");
         countUp(el);
       }, 1);
     });
