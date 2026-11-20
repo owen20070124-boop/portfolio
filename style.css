@@ -258,8 +258,12 @@ h1 { font-size: clamp(36px, 5.4vw, 58px); font-weight: 900; letter-spacing: 0.02
    Theme：玻璃漸層（紫粉漸層背景、半透明毛玻璃卡片）
    ===================================================================== */
 :root { --navy: #6d28d9; --navy-deep: #2e1065; --gold: #db2777; --gold-soft: #fbcfe8; --tint: transparent; --paper: rgba(255, 255, 255, 0.55); --line: rgba(255, 255, 255, 0.7); --ink: #1e1b2e; --body: #3b3650; --muted: #6b6485; }
-body { background: linear-gradient(135deg, #c7d2fe 0%, #e9d5ff 35%, #fbcfe8 70%, #fde68a 100%) fixed; }
-.site-header { background: rgba(255, 255, 255, 0.45); border-bottom-color: rgba(255, 255, 255, 0.6); }
+/* The gradient sits on its own fixed layer: `background-attachment: fixed` would make the
+   browser repaint the whole page on every scroll frame. */
+body { background: #e9d5ff; }
+body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(135deg, #c7d2fe 0%, #e9d5ff 35%, #fbcfe8 70%, #fde68a 100%); }
+/* No backdrop blur on the header (it re-blurs the page under it on every frame); a more opaque fill reads the same. */
+.site-header { background: rgba(250, 245, 255, 0.86); -webkit-backdrop-filter: none; backdrop-filter: none; border-bottom-color: rgba(255, 255, 255, 0.6); }
 .hero { background: transparent; border-bottom: 0; }
 h1 { background: linear-gradient(90deg, #6d28d9, #db2777); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .btn { border-radius: 14px; }
@@ -267,8 +271,10 @@ h1 { background: linear-gradient(90deg, #6d28d9, #db2777); -webkit-background-cl
 .btn-primary:hover { background: linear-gradient(90deg, #6d28d9, #be185d); }
 .btn-ghost { background: rgba(255, 255, 255, 0.55); border-color: rgba(255, 255, 255, 0.9); color: #6d28d9; }
 .btn-ghost:hover { background: rgba(255, 255, 255, 0.8); }
+/* Frosted cards without backdrop-filter: behind them is only a smooth gradient, so blurring it
+   changed almost nothing visually but cost a GPU blur pass per card on every frame. */
 .info, .interest, .card, .featured, .news, .stats, .chart, .role, .lead-list, .award-group, .skill {
-  background: rgba(255, 255, 255, 0.5); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+  background: rgba(255, 255, 255, 0.52);
   border: 1px solid rgba(255, 255, 255, 0.75); border-radius: 20px; box-shadow: 0 10px 30px rgba(76, 29, 149, 0.08); }
 .info { overflow: hidden; }
 .info-row, .info-split, .info-split .info-row + .info-row { border-color: rgba(255, 255, 255, 0.8); }
@@ -304,7 +310,7 @@ h1 { background: linear-gradient(90deg, #6d28d9, #db2777); -webkit-background-cl
 main { overflow-x: hidden; overflow-x: clip; }
 .js .featured, .js .project-grid .card, .js .more li, .js .interest, .js .news,
 .js .gallery figure, .js .timeline li, .js .award-group, .js .skill {
-  opacity: 0; transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1); will-change: opacity, transform; }
+  opacity: 0; transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1); }
 .js .project-grid .card:nth-child(odd), .js .gallery .g-main, .js .awards-grid .award-group:first-child { transform: translateX(-70px); }
 .js .project-grid .card:nth-child(even), .js .gallery figure:not(.g-main), .js .awards-grid .award-group:last-child { transform: translateX(70px); }
 .js .featured, .js .more li, .js .interest, .js .news, .js .timeline li, .js .skill { transform: translateY(36px); }
@@ -317,10 +323,11 @@ main { overflow-x: hidden; overflow-x: clip; }
 /* 頁首漂浮光暈 */
 .hero { position: relative; isolation: isolate; }
 .blobs { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
-.blobs span { position: absolute; border-radius: 50%; filter: blur(64px); opacity: 0.5; animation: drift 20s ease-in-out infinite alternate; will-change: transform; }
-.blobs span:nth-child(1) { width: 440px; height: 440px; background: #8b5cf6; top: -140px; left: -100px; }
-.blobs span:nth-child(2) { width: 380px; height: 380px; background: #f472b6; top: 18%; right: -80px; animation-duration: 24s; animation-direction: alternate-reverse; }
-.blobs span:nth-child(3) { width: 320px; height: 320px; background: #fbbf24; bottom: -160px; left: 36%; opacity: 0.4; animation-duration: 28s; }
+/* soft edges come from radial gradients rather than filter: blur(), which the GPU would redo every frame */
+.blobs span { position: absolute; border-radius: 50%; opacity: 0.55; animation: drift 20s ease-in-out infinite alternate; will-change: transform; }
+.blobs span:nth-child(1) { width: 600px; height: 600px; background: radial-gradient(circle, #8b5cf6 0%, rgba(139, 92, 246, 0.45) 35%, rgba(139, 92, 246, 0) 70%); top: -220px; left: -180px; }
+.blobs span:nth-child(2) { width: 520px; height: 520px; background: radial-gradient(circle, #f472b6 0%, rgba(244, 114, 182, 0.45) 35%, rgba(244, 114, 182, 0) 70%); top: 8%; right: -150px; animation-duration: 24s; animation-direction: alternate-reverse; }
+.blobs span:nth-child(3) { width: 460px; height: 460px; background: radial-gradient(circle, #fbbf24 0%, rgba(251, 191, 36, 0.45) 35%, rgba(251, 191, 36, 0) 70%); bottom: -230px; left: 32%; opacity: 0.45; animation-duration: 28s; }
 @keyframes drift {
   0%   { transform: translate(0, 0) scale(1); }
   50%  { transform: translate(70px, 40px) scale(1.1); }
@@ -330,7 +337,7 @@ main { overflow-x: hidden; overflow-x: clip; }
 
 /* 頂端閱讀進度條與目前區塊 */
 .progress { position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; pointer-events: none; }
-.progress span { display: block; height: 100%; background: linear-gradient(90deg, #7c3aed, #db2777, #f59e0b); transform: scaleX(0); transform-origin: left; }
+.progress span { display: block; height: 100%; background: linear-gradient(90deg, #7c3aed, #db2777, #f59e0b); transform: scaleX(0); transform-origin: left; will-change: transform; }
 .nav a { transition: color 0.2s, border-color 0.2s; }
 .nav a.active { color: #6d28d9; border-bottom-color: #db2777; }
 
@@ -390,9 +397,9 @@ main { overflow-x: hidden; overflow-x: clip; }
 .to-top:focus-visible { outline: 3px solid #f9a8d4; outline-offset: 3px; }
 
 @media (max-width: 640px) {
-  .blobs span:nth-child(1) { width: 280px; height: 280px; }
-  .blobs span:nth-child(2) { width: 240px; height: 240px; }
-  .blobs span:nth-child(3) { width: 220px; height: 220px; }
+  .blobs span:nth-child(1) { width: 380px; height: 380px; }
+  .blobs span:nth-child(2) { width: 330px; height: 330px; }
+  .blobs span:nth-child(3) { width: 300px; height: 300px; }
   .lightbox { padding: 64px 12px 84px; }
   .lb-prev, .lb-next { top: auto; bottom: 18px; margin-top: 0; }
   .lb-prev { left: calc(50% - 60px); }
